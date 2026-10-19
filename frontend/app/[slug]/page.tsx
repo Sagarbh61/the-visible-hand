@@ -1,75 +1,96 @@
-import type {Metadata} from 'next'
-import Head from 'next/head'
+import Link from 'next/link'
+import { client } from '@/sanity/lib/client'
+import { notFound } from 'next/navigation'
 
-import PageBuilderPage from '@/app/components/PageBuilder'
-import {sanityFetch} from '@/sanity/lib/live'
-import {getPageQuery, pagesSlugs} from '@/sanity/lib/queries'
-import {GetPageQueryResult} from '@/sanity.types'
-import {PageOnboarding} from '@/app/components/Onboarding'
-
-/**
- * Generate the static params for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-static-params
- */
-export async function generateStaticParams() {
-  const {data} = await sanityFetch({
-    query: pagesSlugs,
-    // // Use the published perspective in generateStaticParams
-    perspective: 'published',
-    stega: false,
-  })
-  return data
+interface Post {
+  _id: string
+  title: string
+  slug: { current: string }
+  publishedAt: string
+  excerpt: string
+  category: string
 }
 
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
-export async function generateMetadata(props: PageProps<'/[slug]'>): Promise<Metadata> {
-  const params = await props.params
-  const {data: page} = await sanityFetch({
-    query: getPageQuery,
-    params,
-    // Metadata should never contain stega
-    stega: false,
-  })
-
-  return {
-    title: page?.name,
-    description: page?.heading,
-  } satisfies Metadata
+// GROQ query to fetch posts matching the specific category slug
+async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
+  const query = `*[_type == "post" && category->slug.current == $categorySlug]|order(publishedAt desc){
+    _id,
+    title,
+    slug,
+    publishedAt,
+    excerpt,
+    "category": category->title
+  }`
+  return client.fetch(query, { categorySlug })
 }
 
-export default async function Page(props: PageProps<'/[slug]'>) {
-  const params = await props.params
-  const [{data: page}] = await Promise.all([sanityFetch({query: getPageQuery, params})])
+interface PageProps {
+  params: { slug: string }
+}
 
-  if (!page?._id) {
-    return (
-      <div className="py-40">
-        <PageOnboarding />
-      </div>
-    )
-  }
+export default async function CategoryPage({ params }: PageProps) {
+  const { slug } = params
+  const posts = await getPostsByCategory(slug)
+
+  // Format category title nicely from slug (e.g., "book-reviews" -> "Book Reviews")
+  const categoryTitle = slug
+    .split('-')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 
   return (
-    <div className="my-12 lg:my-24">
-      <Head>
-        <title>{page.heading}</title>
-      </Head>
-      <div className="">
-        <div className="container">
-          <div className="pb-6 border-b border-gray-100">
-            <div className="max-w-3xl">
-              <h1 className="text-4xl text-gray-900 sm:text-5xl lg:text-7xl">{page.heading}</h1>
-              <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 uppercase font-light">
-                {page.subheading}
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="container mx-auto max-w-4xl px-4 py-12">
+      {/* Category Header */}
+      <div className="border-b border-gray-200 pb-6 mb-10 text-center">
+        <p className="text-xs font-mono uppercase tracking-widest text-gray-500 mb-2">
+          Category Archive
+        </p>
+        <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gray-900">
+          {categoryTitle}
+        </h1>
       </div>
-      <PageBuilderPage page={page as GetPageQueryResult} />
+
+      {/* Posts List */}
+      {posts.length === 0 ? (
+        <div className="text-center py-20 space-y-4">
+          <p className="font-serif italic text-gray-600 text-lg">
+            No essays found in this category yet.
+          </p>
+          <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+            Check back soon for new analysis and commentary.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-12">
+          {posts.map((post) => (
+            <article key={post._id} className="border-b border-gray-100 pb-10 space-y-3">
+              <div className="flex items-center space-x-3 text-xs font-mono text-gray-500">
+                <span>{new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+                <span>•</span>
+                <span className="uppercase tracking-wider text-red-800">{post.category}</span>
+              </div>
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 hover:text-red-800 transition-colors">
+                <Link href={`/post/${post.slug.current}`}>
+                  {post.title}
+                </Link>
+              </h2>
+              {post.excerpt && (
+                <p className="font-serif text-gray-600 leading-relaxed text-sm sm:text-base line-clamp-3">
+                  {post.excerpt}
+                </p>
+              )}
+              <div>
+                <Link
+                  href={`/post/${post.slug.current}`}
+                  className="inline-block text-xs font-mono font-bold uppercase tracking-wider text-gray-900 hover:text-red-800 transition-colors pt-2"
+                >
+                  Read Essay &rarr;
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

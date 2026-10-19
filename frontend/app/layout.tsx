@@ -1,93 +1,97 @@
-import './globals.css'
+import type { Metadata } from 'next'
+import Link from 'next/link'
+import { NewsletterForm } from '@/app/components/NewsletterForm'
+import '@/app/globals.css'
 
-import {SpeedInsights} from '@vercel/speed-insights/next'
-import type {Metadata} from 'next'
-import {Inter, IBM_Plex_Mono} from 'next/font/google'
-import {draftMode} from 'next/headers'
-import {toPlainText} from 'next-sanity'
-import {VisualEditing} from 'next-sanity/visual-editing'
-import {Toaster} from 'sonner'
-
-import DraftModeToast from '@/app/components/DraftModeToast'
-import Footer from '@/app/components/Footer'
-import Header from '@/app/components/Header'
-import * as demo from '@/sanity/lib/demo'
-import {sanityFetch, SanityLive} from '@/sanity/lib/live'
-import {settingsQuery} from '@/sanity/lib/queries'
-import {resolveOpenGraphImage} from '@/sanity/lib/utils'
-import {handleError} from '@/app/client-utils'
-
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
-export async function generateMetadata(): Promise<Metadata> {
-  const {data: settings} = await sanityFetch({
-    query: settingsQuery,
-    // Metadata should never contain stega
-    stega: false,
-  })
-  const title = settings?.title || demo.title
-  const description = settings?.description || demo.description
-
-  const ogImage = resolveOpenGraphImage(settings?.ogImage)
-  let metadataBase: URL | undefined = undefined
-  try {
-    metadataBase = settings?.ogImage?.metadataBase
-      ? new URL(settings.ogImage.metadataBase)
-      : undefined
-  } catch {
-    // ignore
-  }
-  return {
-    metadataBase,
-    title: {
-      template: `%s | ${title}`,
-      default: title,
-    },
-    description: toPlainText(description),
-    openGraph: {
-      images: ogImage ? [ogImage] : [],
-    },
-  }
+export const metadata: Metadata = {
+  title: 'The Visible Hand | Culture, Policy & Ideas',
+  description:
+    'An editorial publication covering Economics, Politics, Book Reviews, Art, and Fiction by Sagar Bhattarai.',
 }
 
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  display: 'swap',
-})
+const CATEGORIES = [
+  { name: 'Economics', slug: 'economics' },
+  { name: 'Politics', slug: 'politics' },
+  { name: 'Book Reviews', slug: 'book-reviews' },
+  { name: 'Art', slug: 'art' },
+  { name: 'Fiction', slug: 'fiction' },
+]
 
-const ibmPlexMono = IBM_Plex_Mono({
-  variable: '--font-ibm-plex-mono',
-  weight: ['400'],
-  subsets: ['latin'],
-  display: 'swap',
-})
-
-export default async function RootLayout({children}: LayoutProps<'/'>) {
-  const {isEnabled: isDraftMode} = await draftMode()
-
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="en" className={`${inter.variable} ${ibmPlexMono.variable} bg-white text-black`}>
-      <body>
-        <section className="min-h-screen pt-24">
-          {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
-          <Toaster />
-          {isDraftMode && (
-            <>
-              <DraftModeToast />
-              {/*  Enable Visual Editing, only to be rendered when Draft Mode is enabled */}
-              <VisualEditing />
-            </>
-          )}
-          {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
-          <SanityLive onError={handleError} />
-          <Header />
-          <main className="">{children}</main>
-          <Footer />
-        </section>
-        <SpeedInsights />
+    <html lang="en">
+      <body className="min-h-screen bg-white text-gray-900 font-sans flex flex-col justify-between antialiased">
+        {/* Header Navigation */}
+        <header className="border-b border-gray-200">
+          <div className="container mx-auto max-w-5xl px-4 py-8 text-center">
+            <p className="text-xs font-mono uppercase tracking-widest text-gray-500 mb-2">
+              An Editorial Journal on Culture, Policy & Ideas
+            </p>
+            <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-gray-900">
+              <Link href="/" className="hover:text-red-800 transition-colors">
+                The Visible Hand
+              </Link>
+            </h1>
+            <p className="mt-2 text-sm italic text-gray-600 font-serif">
+              Essays & Analysis by Sagar Bhattarai
+            </p>
+          </div>
+
+          <nav className="border-t border-gray-100 bg-gray-50/80">
+            <div className="container mx-auto max-w-5xl px-4 flex items-center justify-center space-x-6 sm:space-x-8 py-3 text-xs sm:text-sm font-medium tracking-wide uppercase font-mono text-gray-700 overflow-x-auto">
+              {CATEGORIES.map((cat: { name: string; slug: string }) => (
+                <Link
+                  key={cat.slug}
+                  href={`/category/${cat.slug}`}
+                  className="hover:text-red-700 transition-colors whitespace-nowrap"
+                >
+                  {cat.name}
+                </Link>
+              ))}
+            </div>
+          </nav>
+        </header>
+
+        {/* Page Body */}
+        <div className="grow">{children}</div>
+
+        {/* Editorial Footer */}
+        <footer className="border-t border-gray-200 bg-gray-50 py-16 mt-20 pb-2">
+          <div className="container mx-auto max-w-4xl px-4 space-y-12">
+
+            {/* 1. Centered Publication Title */}
+            <div className="text-center space-y-2">
+              <h2 className="font-serif text-4xl cursor-pointer mt-6 font-bold tracking-tight text-gray-900 hover:text-red-800">
+                The Visible Hand
+              </h2>
+              <div className="w-12 h-0.5 bg-gray-300 mx-auto"></div>
+            </div>
+
+            {/* 2. Horizontal Newsletter Bar */}
+            <div className="p-6 sm:p-8 shadow-x">
+              <NewsletterForm />
+            </div>
+
+            {/* 3. Bottom Category Links & Copyright */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 text-xs font-mono text-gray-600 uppercase tracking-wider">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-6">
+                {CATEGORIES.map((cat) => (
+                  <Link key={cat.slug} href={`/category/${cat.slug}`} className="hover:text-red-800 transition-colors">
+                    {cat.name}
+                  </Link>
+                ))}
+              </div>
+              <p className="text-gray-400">
+                © {new Date().getFullYear()} Sagar Bhattarai
+              </p>
+            </div>
+
+          </div>
+        </footer>
       </body>
     </html>
   )

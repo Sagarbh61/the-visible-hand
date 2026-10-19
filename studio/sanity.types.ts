@@ -38,6 +38,13 @@ export type Link = {
   openInNewTab?: boolean
 }
 
+export type InfoSection = {
+  _type: 'infoSection'
+  heading?: string
+  subheading?: string
+  content?: BlockContent
+}
+
 export type SanityImageAssetReference = {
   _ref: string
   _type: 'reference'
@@ -62,11 +69,10 @@ export type CallToAction = {
   contentAlignment?: 'textFirst' | 'imageFirst'
 }
 
-export type InfoSection = {
-  _type: 'infoSection'
-  heading?: string
-  subheading?: string
-  content?: BlockContent
+export type Button = {
+  _type: 'button'
+  buttonText?: string
+  link?: Link
 }
 
 export type BlockContentTextOnly = Array<{
@@ -120,12 +126,6 @@ export type BlockContent = Array<
       _key: string
     }
 >
-
-export type Button = {
-  _type: 'button'
-  buttonText?: string
-  link?: Link
-}
 
 export type Settings = {
   _id: string
@@ -183,6 +183,24 @@ export type SanityImageHotspot = {
   width: number
 }
 
+export type Person = {
+  _id: string
+  _type: 'person'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  firstName: string
+  lastName: string
+  picture: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    _type: 'image'
+  }
+}
+
 export type Page = {
   _id: string
   _type: 'page'
@@ -203,11 +221,35 @@ export type Page = {
   >
 }
 
-export type PersonReference = {
+export type Slug = {
+  _type: 'slug'
+  current: string
+  source?: string
+}
+
+export type Category = {
+  _id: string
+  _type: 'category'
+  _createdAt: string
+  _updatedAt: string
+  _rev: string
+  title: string
+  slug: Slug
+  description?: string
+}
+
+export type AuthorReference = {
   _ref: string
   _type: 'reference'
   _weak?: boolean
-  [internalGroqTypeReferenceTo]?: 'person'
+  [internalGroqTypeReferenceTo]?: 'author'
+}
+
+export type CategoryReference = {
+  _ref: string
+  _type: 'reference'
+  _weak?: boolean
+  [internalGroqTypeReferenceTo]?: 'category'
 }
 
 export type Post = {
@@ -218,42 +260,88 @@ export type Post = {
   _rev: string
   title: string
   slug: Slug
-  content?: BlockContent
-  excerpt?: string
-  coverImage?: {
+  author?: AuthorReference
+  mainImage?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
     crop?: SanityImageCrop
     alt?: string
+    caption?: string
     _type: 'image'
   }
-  date?: string
-  author?: PersonReference
+  categories?: Array<
+    {
+      _key: string
+    } & CategoryReference
+  >
+  publishedAt: string
+  excerpt?: string
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>
+          text?: string
+          _type: 'span'
+          _key: string
+        }>
+        style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote'
+        listItem?: 'bullet' | 'number'
+        markDefs?: Array<{
+          href?: string
+          _type: 'link'
+          _key: string
+        }>
+        level?: number
+        _type: 'block'
+        _key: string
+      }
+    | {
+        asset?: SanityImageAssetReference
+        media?: unknown
+        hotspot?: SanityImageHotspot
+        crop?: SanityImageCrop
+        alt?: string
+        caption?: string
+        _type: 'image'
+        _key: string
+      }
+  >
 }
 
-export type Person = {
+export type Author = {
   _id: string
-  _type: 'person'
+  _type: 'author'
   _createdAt: string
   _updatedAt: string
   _rev: string
-  firstName: string
-  lastName: string
-  picture: {
+  name: string
+  slug: Slug
+  image?: {
     asset?: SanityImageAssetReference
     media?: unknown
     hotspot?: SanityImageHotspot
     crop?: SanityImageCrop
-    alt?: string
     _type: 'image'
   }
-}
-
-export type Slug = {
-  _type: 'slug'
-  current: string
-  source?: string
+  bio?: Array<{
+    children?: Array<{
+      marks?: Array<string>
+      text?: string
+      _type: 'span'
+      _key: string
+    }>
+    style?: 'normal'
+    listItem?: never
+    markDefs?: Array<{
+      href?: string
+      _type: 'link'
+      _key: string
+    }>
+    level?: number
+    _type: 'block'
+    _key: string
+  }>
 }
 
 export type SanityAssistInstructionTask = {
@@ -494,20 +582,23 @@ export type AllSanitySchemaTypes =
   | PageReference
   | PostReference
   | Link
+  | InfoSection
   | SanityImageAssetReference
   | CallToAction
-  | InfoSection
+  | Button
   | BlockContentTextOnly
   | BlockContent
-  | Button
   | Settings
   | SanityImageCrop
   | SanityImageHotspot
-  | Page
-  | PersonReference
-  | Post
   | Person
+  | Page
   | Slug
+  | Category
+  | AuthorReference
+  | CategoryReference
+  | Post
+  | Author
   | SanityAssistInstructionTask
   | SanityAssistTaskStatus
   | SanityAssistSchemaTypeAnnotations

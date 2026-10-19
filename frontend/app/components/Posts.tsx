@@ -26,11 +26,11 @@ const Post = ({post}: {post: AllPostsQueryResult[number]}) => {
         <p className="line-clamp-3 text-sm leading-6 text-gray-600 max-w-[70ch]">{excerpt}</p>
       </div>
       <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-100">
-        {author && author.firstName && author.lastName && (
-          <div className="flex items-center">
-            <Avatar person={author} small={true} />
-          </div>
-        )}
+{author?.name && (
+  <div className="flex items-center">
+    <Avatar person={author} small={true} />
+  </div>
+)}
         <time className="text-gray-500 text-xs font-mono" dateTime={date}>
           <DateComponent dateString={date} />
         </time>

@@ -1,4 +1,4 @@
-import {defineQuery} from 'next-sanity'
+import { defineQuery } from 'next-sanity'
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
 
@@ -8,9 +8,10 @@ const postFields = /* groq */ `
   "title": coalesce(title, "Untitled"),
   "slug": slug.current,
   excerpt,
-  coverImage,
-  "date": coalesce(date, _updatedAt),
-  "author": author->{firstName, lastName, picture},
+  mainImage,
+  "date": coalesce(publishedAt, _updatedAt),
+  "author": author->{name, bio, image},
+  "categories": categories[]->{title, slug}
 `
 
 const linkReference = /* groq */ `
@@ -22,9 +23,9 @@ const linkReference = /* groq */ `
 
 const linkFields = /* groq */ `
   link {
-      ...,
-      ${linkReference}
-      }
+    ...,
+    ${linkReference}
+  }
 `
 
 export const getPageQuery = defineQuery(`
@@ -66,26 +67,26 @@ export const sitemapData = defineQuery(`
 `)
 
 export const allPostsQuery = defineQuery(`
-  *[_type == "post" && defined(slug.current)] | order(date desc, _updatedAt desc) {
+  *[_type == "post" && defined(slug.current)] | order(publishedAt desc, _updatedAt desc) {
     ${postFields}
   }
 `)
 
 export const morePostsQuery = defineQuery(`
-  *[_type == "post" && _id != $skip && defined(slug.current)] | order(date desc, _updatedAt desc) [0...$limit] {
+  *[_type == "post" && _id != $skip && defined(slug.current)] | order(publishedAt desc, _updatedAt desc) [0...$limit] {
     ${postFields}
   }
 `)
 
 export const postQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
-    content[]{
-    ...,
-    markDefs[]{
+    body[]{
       ...,
-      ${linkReference}
-    }
-  },
+      markDefs[]{
+        ...,
+        ${linkReference}
+      }
+    },
     ${postFields}
   }
 `)
