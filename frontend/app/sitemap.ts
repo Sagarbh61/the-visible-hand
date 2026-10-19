@@ -1,61 +1,49 @@
-import {MetadataRoute} from 'next'
-import {sanityFetch} from '@/sanity/lib/live'
-import {sitemapData} from '@/sanity/lib/queries'
-import {headers} from 'next/headers'
 
-/**
- * This file creates a sitemap (sitemap.xml) for the application. Learn more about sitemaps in Next.js here: https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
- * Be sure to update the `changeFrequency` and `priority` values to match your application's content.
- */
+import type { MetadataRoute } from 'next'
+import { sanityFetch } from '@/sanity/lib/live'
+import { sitemapData } from '@/sanity/lib/queries'
+
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
+  .replace(/\/+$/, '')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const allPostsAndPages = await sanityFetch({
+  const { data } = await sanityFetch({
     query: sitemapData,
   })
-  const headersList = await headers()
-  const sitemap: MetadataRoute.Sitemap = []
-  const domain: string = headersList.get('host') as string
-  sitemap.push({
-    url: domain as string,
-    lastModified: new Date(),
-    priority: 1,
-    changeFrequency: 'monthly',
-  })
 
-  if (allPostsAndPages != null && allPostsAndPages.data.length != 0) {
+  const sitemapEntries: MetadataRoute.Sitemap = [
+    {
+      url: siteUrl,
+      lastModified: new Date(),
+      priority: 1,
+      changeFrequency: 'monthly',
+    },
+  ]
+
+  for (const item of data) {
+    let path: string
     let priority: number
-    let changeFrequency:
-      | 'monthly'
-      | 'always'
-      | 'hourly'
-      | 'daily'
-      | 'weekly'
-      | 'yearly'
-      | 'never'
-      | undefined
-    let url: string
+    let changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
 
-    for (const p of allPostsAndPages.data) {
-      switch (p._type) {
-        case 'page':
-          priority = 0.8
-          changeFrequency = 'monthly'
-          url = `${domain}/${p.slug}`
-          break
-        case 'post':
-          priority = 0.5
-          changeFrequency = 'never'
-          url = `${domain}/posts/${p.slug}`
-          break
-      }
-      sitemap.push({
-        lastModified: p._updatedAt || new Date(),
-        priority,
-        changeFrequency,
-        url,
-      })
+    if (item._type === 'page') {
+      path = `/${item.slug}`
+      priority = 0.8
+      changeFrequency = 'monthly'
+    } else if (item._type === 'post') {
+      path = `/posts/${item.slug}`
+      priority = 0.5
+      changeFrequency = 'never'
+    } else {
+      continue
     }
+
+    sitemapEntries.push({
+      url: `${siteUrl}${path}`,
+      lastModified: item._updatedAt || new Date(),
+      priority,
+      changeFrequency,
+    })
   }
 
-  return sitemap
+  return sitemapEntries
 }
