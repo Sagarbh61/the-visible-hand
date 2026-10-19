@@ -1,10 +1,16 @@
-
 'use server'
 
-import { Resend } from 'resend'
+import { createNewsletterConfirmation } from '../../db/newsletter-confirmation'
+import { sendNewsletterConfirmationEmail } from '../../lib/newsletter-email'
 
 export async function subscribeToNewsletter(formData: FormData) {
   const emailValue = formData.get('email')
+  const honeypotValue = formData.get('companyWebsite')
+
+  // Silently ignore likely automated submissions.
+  if (typeof honeypotValue === 'string' && honeypotValue.trim() !== '') {
+    return { success: 'Thank you for subscribing!' }
+  }
 
   if (
     typeof emailValue !== 'string' ||
@@ -13,40 +19,20 @@ export async function subscribeToNewsletter(formData: FormData) {
     return { error: 'Please provide a valid email address.' }
   }
 
-  const apiKey = process.env.RESEND_API_KEY
-  const audienceId = process.env.RESEND_AUDIENCE_ID
-
-  if (!apiKey || !audienceId) {
-    console.error('Newsletter configuration is missing.')
-    return {
-      error: 'Newsletter subscriptions are temporarily unavailable.',
-    }
-  }
+  const email = emailValue.trim().toLowerCase()
 
   try {
-    const resend = new Resend(apiKey)
-
-    const { error } = await resend.contacts.create({
-      email: emailValue.trim().toLowerCase(),
-      audienceId,
-      unsubscribed: false,
-    })
-
-    if (error) {
-      console.error('Newsletter subscription failed:', error.name)
-      return {
-        error: 'Failed to subscribe. Please try again shortly.',
-      }
-    }
+    const token = await createNewsletterConfirmation(email)
+    await sendNewsletterConfirmationEmail(email, token)
 
     return {
-      success: 'Thank you for subscribing!',
+      success: 'Please check your inbox for a confirmation link.',
     }
-  } catch (error) {
-    console.error('Newsletter subscription failed.')
+  } catch {
+    console.error('Newsletter confirmation request failed.')
 
     return {
-      error: 'Failed to subscribe. Please try again shortly.',
+      error: 'We could not send a confirmation email right now. Please try again shortly.',
     }
   }
 }

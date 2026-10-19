@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 }
 
 const CATEGORIES = [
-  { name: 'Economics', slug: 'economics' },
+  { name: 'Economy', slug: 'economy' },
   { name: 'Politics', slug: 'politics' },
   { name: 'Book Reviews', slug: 'book-reviews' },
   { name: 'Art', slug: 'art' },
