@@ -25,11 +25,11 @@ async function getPostsByCategory(categorySlug: string): Promise<Post[]> {
 }
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const { slug } = params
+  const { slug } = await params
   const posts = await getPostsByCategory(slug)
 
   // Format category title nicely from slug (e.g., "book-reviews" -> "Book Reviews")

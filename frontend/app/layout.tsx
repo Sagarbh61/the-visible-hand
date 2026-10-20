@@ -28,21 +28,19 @@ export default function RootLayout({
         {/* Header Navigation */}
         <header className="border-b border-gray-200">
           <div className="container mx-auto max-w-5xl px-4 py-8 text-center">
-            <p className="text-xs font-mono uppercase tracking-widest text-gray-500 mb-2">
-              An Editorial Journal on Culture, Policy & Ideas
-            </p>
+
             <h1 className="font-serif text-4xl sm:text-6xl font-bold tracking-tight text-gray-900">
               <Link href="/" className="hover:text-red-800 transition-colors">
                 The Visible Hand
               </Link>
             </h1>
-            <p className="mt-2 text-sm italic text-gray-600 font-serif">
-              Essays & Analysis by Sagar Bhattarai
+            <p className="text-xs font-mono uppercase tracking-widest text-gray-500 mt-2">
+              An Editorial Journal on Culture, Policy & Ideas
             </p>
           </div>
 
           <nav className="border-t border-gray-100 bg-gray-50/80">
-            <div className="container mx-auto max-w-5xl px-4 flex items-center justify-center space-x-6 sm:space-x-8 py-3 text-xs sm:text-sm font-medium tracking-wide uppercase font-mono text-gray-700 overflow-x-auto">
+            <div className="container mx-auto max-w-5xl px-3 sm:px-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-8 py-3 text-[10px] sm:text-sm font-medium tracking-wide uppercase font-mono text-gray-700">
               {CATEGORIES.map((cat: { name: string; slug: string }) => (
                 <Link
                   key={cat.slug}
@@ -52,6 +50,8 @@ export default function RootLayout({
                   {cat.name}
                 </Link>
               ))}
+
+
             </div>
           </nav>
         </header>
@@ -60,36 +60,142 @@ export default function RootLayout({
         <div className="grow">{children}</div>
 
         {/* Editorial Footer */}
-        <footer className="border-t border-gray-200 bg-gray-50 py-16 mt-20 pb-2">
-          <div className="container mx-auto max-w-4xl px-4 space-y-12">
+        {/* Editorial Footer */}
+        <footer className="mt-16 border-t border-gray-200 bg-gray-50">
+          <div className="container mx-auto max-w-6xl px-4 py-10 sm:py-12">
+            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+              {/* Publication identity */}
+              <div className="flex flex-col items-start">
 
-            {/* 1. Centered Publication Title */}
-            <div className="text-center space-y-2">
-              <h2 className="font-serif text-4xl cursor-pointer mt-6 font-bold tracking-tight text-gray-900 hover:text-red-800">
-                The Visible Hand
-              </h2>
-              <div className="w-12 h-0.5 bg-gray-300 mx-auto"></div>
-            </div>
 
-            {/* 2. Horizontal Newsletter Bar */}
-            <div className="p-6 sm:p-8 shadow-x">
-              <NewsletterForm />
-            </div>
+                <Link
+                  href="/"
+                  className="font-serif text-4xl whitespace-nowrap font-bold tracking-tight text-gray-900 transition-colors hover:text-red-800"
+                >
+                  The Visible Hand
+                </Link>
+                <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-gray-500">
+                  An Editorial Journal on Culture, Policy &amp; Ideas
+                </p>
 
-            {/* 3. Bottom Category Links & Copyright */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200 text-xs font-mono text-gray-600 uppercase tracking-wider">
-              <div className="flex flex-wrap justify-center sm:justify-start gap-6">
-                {CATEGORIES.map((cat) => (
-                  <Link key={cat.slug} href={`/category/${cat.slug}`} className="hover:text-red-800 transition-colors">
-                    {cat.name}
-                  </Link>
-                ))}
+<div className="mt-auto flex items-center gap-4 text-gray-500">
+  <a
+    href="mailto:hellosagarbh71@gmail.com"
+    aria-label="Email Sagar"
+    title="Email"
+    className="transition-colors hover:text-red-800"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m3 7 9 6 9-6" />
+    </svg>
+  </a>
+
+  <a
+    href="https://www.instagram.com/sagarbh_/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Instagram profile"
+    title="Instagram"
+    className="transition-colors hover:text-red-800"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none" />
+    </svg>
+  </a>
+
+  <a
+    href="https://www.facebook.com/Sagarbh61/"
+    target="_blank"
+    rel="noopener noreferrer"
+    aria-label="Facebook profile"
+    title="Facebook"
+    className="transition-colors hover:text-red-800"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="19"
+      height="19"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+    >
+      <path d="M13.4 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1v2.3H7.6V13h2.7v8z" />
+    </svg>
+  </a>
+</div>
+
+
               </div>
-              <p className="text-gray-400">
-                © {new Date().getFullYear()} Sagar Bhattarai
-              </p>
+
+
+
+              {/* Category navigation */}
+              <nav
+                aria-label="Footer navigation"
+                className="flex h-full items-center justify-center"
+              >
+                <ul className="space-y-6">
+                  {CATEGORIES.map((cat) => (
+                    <li key={cat.slug}>
+                      <Link
+                        href={`/category/${cat.slug}`}
+                        className="group uppercase inline-flex items-center justify-center gap-4 text-sm text-gray-700 transition-colors hover:text-red-800"
+                      >
+
+                        <span>{cat.name}</span>
+                        <span aria-hidden="true" className="text-xl text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-red-800">
+                          ›
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Newsletter */}
+              <div>
+                <NewsletterForm />
+              </div>
             </div>
 
+            {/* Legal links and copyright */}
+            <div className="mt-8 flex flex-col gap-3 border-t border-gray-200 pt-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+              <p>© {new Date().getFullYear()} The Visible Hand</p>
+
+              <nav aria-label="Legal links" className="flex flex-wrap gap-x-5 gap-y-2">
+                <Link href="/privacy" className="transition-colors hover:text-red-800">
+                  Privacy Policy
+                </Link>
+                <Link href="/cookie-policy" className="transition-colors hover:text-red-800">
+                  Cookie Policy
+                </Link>
+              </nav>
+            </div>
           </div>
         </footer>
       </body>

@@ -46,23 +46,20 @@ export function NewsletterForm() {
     }
   }
 
-  return (
-    <div className="bg-gray-50 px-4 py-8">
-      <div className="container mx-auto flex flex-col items-center justify-between gap-6 md:flex-row">
-        <div className="space-y-1 text-center md:text-left">
-          <h2 className="whitespace-nowrap font-serif text-lg font-bold text-gray-900 sm:text-xl">
+    return (
+    <div className="w-full min-w-0 bg-transparent p-0">
+      <div className="flex w-full min-w-0 flex-col items-start gap-4">
+        <div className="w-full min-w-0 space-y-1">
+          <h2 className="font-serif text-xl font-bold leading-snug text-gray-900">
             Subscribe to our newsletter
           </h2>
-          <p className="font-serif text-xs italic text-gray-600">
+          <p className="font-serif text-xs leading-5 italic text-gray-600">
             Essays on economics, politics, and culture delivered to your inbox.
           </p>
         </div>
 
-        <div className="w-full md:w-auto">
-          <form
-            onSubmit={handleSubmit}
-            className="mx-auto flex max-w-md gap-2 md:mx-0"
-          >
+        <div className="w-full min-w-0">
+          <form onSubmit={handleSubmit} className="flex w-full min-w-0 flex-col gap-2">
             <input
               type="text"
               name="companyWebsite"
@@ -77,27 +74,27 @@ export function NewsletterForm() {
               name="email"
               required
               placeholder="Your email address..."
-              className="w-full border border-gray-300 bg-white px-4 py-2 font-mono text-xs text-gray-900 transition-colors focus:border-red-800 focus:outline-none md:w-64"
+              className="box-border w-full min-w-0 border border-gray-300 bg-white px-3 py-2.5 font-mono text-xs text-gray-900 transition-colors focus:border-red-800 focus:outline-none"
             />
 
             <button
               type="submit"
               disabled={loading}
               style={{ backgroundColor: '#ef4444' }}
-              className="cursor-pointer whitespace-nowrap px-4 py-2 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors disabled:opacity-50"
+              className="w-full cursor-pointer px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors disabled:opacity-50"
             >
               {loading ? 'Joining...' : 'Subscribe'}
             </button>
           </form>
 
-          <p className="mt-2 font-serif text-xs text-gray-500">
+          <p className="mt-2 text-xs leading-5 text-gray-500">
             By subscribing, you agree to receive email updates from The Visible Hand.
           </p>
 
           {status.message && (
             <p
               role={status.isError ? 'alert' : 'status'}
-              className={`pt-2 text-center font-mono text-xs md:text-left ${
+              className={`pt-2 font-mono text-xs ${
                 status.isError ? 'text-red-600' : 'text-green-700'
               }`}
             >
