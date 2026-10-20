@@ -57,6 +57,11 @@ export default function PrivacyPage() {
             reliability, and security. The precise information retained
             depends on the services involved.
           </p>
+          <p className="mt-3">
+            If you accept analytics, Google Analytics may collect information
+            about your visits and interactions with the website. Analytics is
+            not loaded through the site's consent integration unless you accept.
+          </p>
         </section>
 
         <section>
@@ -90,9 +95,23 @@ export default function PrivacyPage() {
             Their own privacy policies and practices also apply.
           </p>
           <p className="mt-3">
-            We do not currently integrate a general-purpose analytics service
-            in the application code. This may change if the website's needs
-            change, in which case this policy should be updated.
+            The website uses Google Analytics 4 (GA4) to understand how visitors
+            use the publication, such as which pages are viewed and how visitors
+            interact with the site. Google Analytics is loaded only after you
+            accept analytics through the site's consent controls. If you reject
+            analytics, the site does not load Google Analytics through this
+            integration.
+          </p>
+          <p className="mt-3">
+            Google may process usage information, device and browser information,
+            and online identifiers to provide its analytics service. Information
+            is sent to Google when analytics is enabled and may be processed
+            according to Google's own privacy practices.
+          </p>
+          <p className="mt-3">
+            Your analytics choice is saved in your browser's local storage so
+            the site can remember your preference. You can change your choice
+            using Cookie settings on the website.
           </p>
         </section>
 

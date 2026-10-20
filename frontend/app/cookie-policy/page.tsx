@@ -42,9 +42,10 @@ export default function CookiePolicyPage() {
             2. How this website uses cookies
           </h2>
           <p>
-            The Visible Hand does not currently integrate a dedicated
-            advertising or general-purpose analytics platform in its
-            application code.
+            The Visible Hand uses Google Analytics 4 to measure website usage
+            when a visitor accepts analytics through the site's consent controls.
+            Google Analytics may use cookies and similar technologies to
+            distinguish visits and understand interactions with the website.
           </p>
           <p className="mt-3">
             The website uses Next.js draft mode for editorial preview
@@ -52,6 +53,12 @@ export default function CookiePolicyPage() {
             the framework may set a cookie so that unpublished content can
             be previewed. This is a functional use associated with editorial
             preview, rather than an advertising feature.
+          </p>
+          <p className="mt-3">
+            The site saves your analytics choice in your browser's local storage.
+            This preference storage is separate from cookies. Google Analytics
+            is loaded through this site's consent integration only after you
+            accept analytics.
           </p>
           <p className="mt-3">
             Hosting infrastructure and other website components may also
@@ -87,6 +94,12 @@ export default function CookiePolicyPage() {
             Browser controls do not necessarily control every form of
             technical processing performed by hosting or other service
             providers.
+          </p>
+          <p className="mt-3">
+            You can change your analytics choice at any time using the Cookie
+            settings control on the website. Rejecting analytics prevents this
+            site's consent integration from loading Google Analytics. Browser
+            settings can also be used to manage cookies and local storage.
           </p>
         </section>
 

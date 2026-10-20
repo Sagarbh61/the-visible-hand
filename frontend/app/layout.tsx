@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { NewsletterForm } from '@/app/components/NewsletterForm'
+import { AnalyticsConsent } from '@/app/components/AnalyticsConsent'
 import '@/app/globals.css'
 
 
@@ -227,6 +228,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <AnalyticsConsent />
       </body>
     </html>
   )
