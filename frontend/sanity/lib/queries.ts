@@ -1,4 +1,4 @@
-import { defineQuery } from 'next-sanity'
+import {defineQuery} from 'next-sanity'
 
 export const settingsQuery = defineQuery(`*[_type == "settings"][0]`)
 
@@ -59,7 +59,11 @@ export const getPageQuery = defineQuery(`
 `)
 
 export const sitemapData = defineQuery(`
-  *[_type in ["page", "post"] && defined(slug.current)] | order(_type asc) {
+  *[
+    _type in ["page", "post", "category"] &&
+    defined(slug.current) &&
+    !(_id in path("drafts.**"))
+  ] | order(_type asc) {
     "slug": slug.current,
     _type,
     _updatedAt,

@@ -3,30 +3,9 @@ import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 import { sanityFetch } from '@/sanity/lib/live'
 import { postQuery } from '@/sanity/lib/queries'
-
-interface Category {
-  title: string
-  slug?: {
-    current: string
-  }
-}
-
-interface Author {
-  name?: string
-  bio?: any
-  image?: any
-}
-
-interface Post {
-  _id: string
-  title?: string
-  slug?: string
-  excerpt?: string
-  body?: any
-  date?: string
-  author?: Author
-  categories?: Category[]
-}
+import type { Metadata } from 'next'
+import type { PostQueryResult } from '@/sanity.types'
+import { resolveOpenGraphImage } from '@/sanity/lib/utils'
 
 interface PostPageProps {
   params: Promise<{
@@ -34,14 +13,71 @@ interface PostPageProps {
   }>
 }
 
-export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params
+async function getPost(slug: string): Promise<PostQueryResult> {
   const { data } = await sanityFetch({
     query: postQuery,
     params: { slug },
   })
 
-  const post = data as Post | null
+  return data
+}
+
+export async function generateMetadata({
+  params,
+}: PostPageProps): Promise<Metadata> {
+  const { slug } = await params
+  const post = await getPost(slug)
+
+  if (!post) {
+    return {
+      title: 'Article Not Found',
+      description: 'The requested article could not be found.',
+    }
+  }
+
+  const title = post.title || 'Untitled'
+  const description =
+    post.excerpt ||
+    'Read this article from The Visible Hand, an editorial publication covering economics, politics, culture, and ideas.'
+
+  const canonicalUrl = `/posts/${slug}`
+  const image = resolveOpenGraphImage(post.mainImage)
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      type: 'article',
+      title,
+      description,
+      url: canonicalUrl,
+      ...(post.date && {
+        publishedTime: post.date,
+      }),
+      ...(post.author?.name && {
+        authors: [post.author.name],
+      }),
+      ...(image && {
+        images: [image],
+      }),
+    },
+    twitter: {
+      card: image ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      ...(image && {
+        images: [image.url],
+      }),
+    },
+  }
+}
+
+export default async function PostPage({ params }: PostPageProps) {
+  const { slug } = await params
+  const post = await getPost(slug)
 
   if (!post) {
     notFound()
@@ -62,14 +98,15 @@ export default async function PostPage({ params }: PostPageProps) {
         <header className="border-b border-gray-200 pb-8 mb-8">
           {/* Categories */}
           {post.categories && post.categories.length > 0 && (
-            <div className="flex gap-2 mb-3">
+            <div className="flex flex-wrap gap-2 mb-3">
               {post.categories.map((cat, index) => (
-                <span
+                <Link
                   key={cat.slug?.current || index}
-                  className="text-xs font-semibold tracking-widest text-red-700 uppercase font-mono"
+                  href={`/category/${cat.slug?.current || ''}`}
+                  className="text-xs font-semibold tracking-widest text-red-700 uppercase font-mono hover:text-red-900 transition-colors"
                 >
                   {cat.title}
-                </span>
+                </Link>
               ))}
             </div>
           )}
@@ -87,9 +124,11 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
 
           {/* Author & Date Metadata */}
-          <div className="mt-6 flex items-center text-xs text-gray-500 font-mono space-x-2">
+          <div className="mt-6 flex flex-wrap items-center text-xs text-gray-500 font-mono gap-x-2 gap-y-1">
             {post.author?.name && <span>By {post.author.name}</span>}
+
             {post.author?.name && post.date && <span>•</span>}
+
             {post.date && (
               <time dateTime={post.date}>
                 {new Date(post.date).toLocaleDateString('en-US', {
@@ -102,12 +141,14 @@ export default async function PostPage({ params }: PostPageProps) {
           </div>
         </header>
 
-        {/* Article Body (Portable Text) */}
+        {/* Article Body */}
         <main className="prose prose-lg sm:prose-xl max-w-none font-serif text-gray-800 leading-relaxed">
           {post.body ? (
             <PortableText value={post.body} />
           ) : (
-            <p className="text-gray-400 italic">No content found for this post.</p>
+            <p className="text-gray-400 italic">
+              No content found for this post.
+            </p>
           )}
         </main>
       </div>

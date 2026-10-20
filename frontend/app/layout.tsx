@@ -3,11 +3,37 @@ import Link from 'next/link'
 import { NewsletterForm } from '@/app/components/NewsletterForm'
 import '@/app/globals.css'
 
+
+const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://the-visible-hand.vercel.app'
+).replace(/\/+$/, '')
+
 export const metadata: Metadata = {
-  title: 'The Visible Hand | Culture, Policy & Ideas',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'The Visible Hand | Culture, Policy & Ideas',
+    template: '%s | The Visible Hand',
+  },
   description:
     'An editorial publication covering Economics, Politics, Book Reviews, Art, and Fiction by Sagar Bhattarai.',
+  openGraph: {
+    type: 'website',
+    siteName: 'The Visible Hand',
+    title: 'The Visible Hand | Culture, Policy & Ideas',
+    description:
+      'An editorial publication covering Economics, Politics, Book Reviews, Art, and Fiction by Sagar Bhattarai.',
+    url: '/',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'The Visible Hand | Culture, Policy & Ideas',
+    description:
+      'An editorial publication covering Economics, Politics, Book Reviews, Art, and Fiction by Sagar Bhattarai.',
+  },
 }
+
 
 const CATEGORIES = [
   { name: 'Economy', slug: 'economy' },

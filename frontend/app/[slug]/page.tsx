@@ -70,7 +70,7 @@ export default async function CategoryPage({ params }: PageProps) {
                 <span className="uppercase tracking-wider text-red-800">{post.category}</span>
               </div>
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 hover:text-red-800 transition-colors">
-                <Link href={`/post/${post.slug.current}`}>
+                <Link href={`/posts/${post.slug.current}`}>
                   {post.title}
                 </Link>
               </h2>
@@ -81,7 +81,7 @@ export default async function CategoryPage({ params }: PageProps) {
               )}
               <div>
                 <Link
-                  href={`/post/${post.slug.current}`}
+                  href={`/posts/${post.slug.current}`}
                   className="inline-block text-xs font-mono font-bold uppercase tracking-wider text-gray-900 hover:text-red-800 transition-colors pt-2"
                 >
                   Read Essay &rarr;

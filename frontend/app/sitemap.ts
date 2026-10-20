@@ -1,15 +1,19 @@
-
 import type { MetadataRoute } from 'next'
+import type { SitemapDataResult } from '@/sanity.types'
 import { sanityFetch } from '@/sanity/lib/live'
 import { sitemapData } from '@/sanity/lib/queries'
 
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000')
-  .replace(/\/+$/, '')
+const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  'https://the-visible-hand.vercel.app'
+).replace(/\/+$/, '')
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { data } = await sanityFetch({
     query: sitemapData,
   })
+
+  const items = data as SitemapDataResult
 
   const sitemapEntries: MetadataRoute.Sitemap = [
     {
@@ -20,7 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ]
 
-  for (const item of data) {
+  for (const item of items) {
     let path: string
     let priority: number
     let changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']
@@ -33,6 +37,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       path = `/posts/${item.slug}`
       priority = 0.5
       changeFrequency = 'never'
+    } else if (item._type === 'category') {
+      path = `/category/${item.slug}`
+      priority = 0.7
+      changeFrequency = 'weekly'
     } else {
       continue
     }
