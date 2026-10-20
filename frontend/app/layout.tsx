@@ -11,6 +11,9 @@ const siteUrl = (
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  verification: {
+  google: '9rWaUIWeKDOZwAEOC4S-rfAqOVep-tBW5NKZ0xV5ACs',
+},
   title: {
     default: 'The Visible Hand | Culture, Policy & Ideas',
     template: '%s | The Visible Hand',
