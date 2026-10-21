@@ -93,9 +93,9 @@ export default function RootLayout({
         {/* Editorial Footer */}
         <footer className="mt-16 border-t border-gray-200 bg-gray-50">
           <div className="container mx-auto max-w-6xl px-4 py-10 sm:py-12">
-            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-8 md:min-[800px]:grid-cols-3 md:min-[999px]:grid-cols-3 md:gap-12">
               {/* Publication identity */}
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col">
 
 
                 <Link
@@ -108,7 +108,7 @@ export default function RootLayout({
                   An Editorial Journal on Culture, Policy &amp; Ideas
                 </p>
 
-<div className="mt-auto flex items-center gap-4 text-gray-500">
+<div className="mt-6 flex items-center gap-4 text-gray-500 lg:mt-auto">
   <a
     href="mailto:hellosagarbh71@gmail.com"
     aria-label="Email Sagar"
@@ -187,14 +187,14 @@ export default function RootLayout({
               {/* Category navigation */}
               <nav
                 aria-label="Footer navigation"
-                className="flex h-full items-center justify-center"
+               className="flex h-full min-[630px]:justify-self-end items-start min-[800px]:justify-self-center min-[600px]:col-start-2 min-[1001px]:row-start-1 min-[1001px]:justify-self-center min-[1001px]:items-end"
               >
-                <ul className="space-y-6">
+                <ul className="space-y-6 flex flex-col w-full">
                   {CATEGORIES.map((cat) => (
                     <li key={cat.slug}>
                       <Link
                         href={`/category/${cat.slug}`}
-                        className="group uppercase inline-flex items-center justify-center gap-4 text-sm text-gray-700 transition-colors hover:text-red-800"
+                        className="group flex w-full text-left items-center gap-4 text-sm uppercase text-gray-700 transition-colors hover:text-red-800"
                       >
 
                         <span>{cat.name}</span>

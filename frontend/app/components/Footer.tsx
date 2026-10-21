@@ -1,22 +1,34 @@
+
 export default function Footer() {
   return (
-    <footer className="bg-gray-50 relative">
-      <div className="absolute inset-0 bg-[url(/images/tile-grid-black.png)] bg-size-[17px] opacity-20 bg-position-[0_1]" />
-      <div className="container relative">
-        <div className="flex flex-col items-center py-28 lg:flex-row">
-          <h3 className="mb-10 text-center text-4xl font-mono leading-tight tracking-tighter lg:mb-0 lg:w-1/2 lg:pr-4 lg:text-left lg:text-2xl">
+    <footer className="relative overflow-hidden bg-gray-50">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[url(/images/tile-grid-black.png)] bg-size-[17px] bg-position-[0_1] opacity-20"
+      />
+
+      <div className="container relative mx-auto px-4 sm:px-6">
+        <div className="flex flex-col items-center gap-8 py-12 sm:py-16 lg:flex-row lg:gap-0 lg:py-28">
+          <h3 className="text-center font-mono text-2xl leading-tight tracking-tight sm:text-3xl lg:mb-0 lg:w-1/2 lg:pr-4 lg:text-left lg:text-2xl">
             Built with Sanity + Next.js.
           </h3>
-          <div className="flex flex-col gap-3 items-center justify-center lg:w-1/2 lg:flex-row lg:pl-4">
+
+          <div className="flex w-full flex-col items-center justify-center gap-4 sm:flex-row lg:w-1/2 lg:justify-end lg:pl-4">
             <a
               href="https://github.com/sanity-io/sanity-template-nextjs-clean"
-              className="rounded-full flex gap-2 font-mono whitespace-nowrap items-center bg-black hover:bg-blue focus:bg-blue py-3 px-6 text-white transition-colors duration-200"
+              className="inline-flex min-h-11 w-full max-w-xs items-center justify-center rounded-full bg-black px-6 py-3 text-center font-mono text-sm text-white transition-colors duration-200 hover:bg-blue focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue sm:w-auto"
               target="_blank"
               rel="noopener noreferrer"
             >
               View on GitHub
             </a>
-            <a href="https://nextjs.org/docs" className="mx-3 hover:underline font-mono">
+
+            <a
+              href="https://nextjs.org/docs"
+              className="inline-flex min-h-11 items-center justify-center px-2 py-2 text-center font-mono text-sm text-gray-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read Next.js Documentation
             </a>
           </div>
