@@ -1,108 +1,165 @@
-# Clean Next.js + Sanity app
+# The Visible Hand
 
-This template includes a [Next.js](https://nextjs.org/) app with a [Sanity Studio](https://www.sanity.io/) – an open-source React application that connects to your Sanity project’s hosted dataset. The Studio is configured locally and can then be deployed for content collaboration.
+**An Editorial Journal on Culture, Policy & Ideas**
 
-![Screenshot of Sanity Studio using Presentation Tool to do Visual Editing](/sanity-next-preview.png)
+[Visit the live website](https://the-visible-hand.vercel.app) · [View the source code](https://github.com/Sagarbh61/the-visible-hand)
+
+The Visible Hand is an independent editorial publication exploring ideas across economics, politics, literature, art, and fiction. It provides a space for essays, commentary, book reviews, and creative work, with an emphasis on thoughtful analysis and clear writing.
+
+The project combines an editorial website with a headless content management system, bringing together content publishing, responsive design, search, and article discovery in a single platform.
 
 ## Features
 
-- **Next.js 16 for Performance:** Leverage the power of Next.js 16 App Router for blazing-fast performance and SEO-friendly static sites.
-- **Real-time Visual Editing:** Edit content live with Sanity's [Presentation Tool](https://www.sanity.io/docs/presentation) and see updates in real time.
-- **Live Content:** The [Live Content API](https://www.sanity.io/live) allows you to deliver live, dynamic experiences to your users without the complexity and scalability challenges that typically come with building real-time functionality.
-- **Customizable Pages with Drag-and-Drop:** Create and manage pages using a page builder with dynamic components and [Drag-and-Drop Visual Editing](https://www.sanity.io/visual-editing-for-structured-content).
-- **Powerful Content Management:** Collaborate with team members in real-time, with fine-grained revision history.
-- **AI-powered Media Support:** Auto-generate alt text with [Sanity AI Assist](https://www.sanity.io/ai-assist).
-- **On-demand Publishing:** No waiting for rebuilds—new content is live instantly with Incremental Static Revalidation.
-- **Easy Media Management:** [Integrated Unsplash support](https://www.sanity.io/plugins/sanity-plugin-asset-source-unsplash) for seamless media handling.
+- **Editorial homepage** with a structured presentation of published articles.
+- **Category archives** for browsing content by subject.
+- **Individual article pages** with publication metadata, featured images, and article content.
+- **Related articles** to help readers discover relevant writing.
+- **Search functionality** for finding articles across the publication.
+- **Content management** through Sanity.
+- **Responsive design** for desktop, tablet, and mobile screens.
+- **SEO support**, including page metadata, Open Graph metadata, and sitemap generation.
+- **Privacy-conscious analytics** with consent-gated Google Analytics.
+- **Newsletter functionality** for reader subscriptions and confirmation flows.
+- **Legal pages** covering privacy and cookie policies.
 
-## Demo
+## Editorial Categories
 
-https://template-nextjs-clean.sanity.dev
+The publication currently organizes content into five categories:
+
+- **Economy** — Markets, development, and economic ideas.
+- **Politics** — Power, institutions, and public policy.
+- **Book Reviews** — Critical engagement with books and their arguments.
+- **Art** — Art, culture, and creative expression.
+- **Fiction** — Literary and creative writing.
+
+## Technology Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js | Web application and routing |
+| React | User interface |
+| TypeScript | Type-safe application development |
+| Tailwind CSS | Responsive styling |
+| Sanity | Headless content management |
+| next-sanity | Integration between Next.js and Sanity |
+| Vercel | Website deployment |
+| Google Analytics 4 | Consent-gated website analytics |
+
+## Project Structure
+
+The repository is organized around the frontend application and its content-management integration.
+
+```text
+the-visible-hand/
+├── frontend/
+│   ├── app/
+│   │   ├── components/       # Reusable interface components
+│   │   ├── category/         # Category archive pages
+│   │   ├── posts/            # Individual article pages
+│   │   ├── search/           # Article search page
+│   │   ├── privacy/          # Privacy policy
+│   │   └── ...               # Other routes and layouts
+│   ├── sanity/
+│   │   └── lib/
+│   │       └── queries.ts    # Sanity content queries
+│   ├── sanity.types.ts       # Generated Sanity TypeScript types
+│   └── package.json
+├── sanity.schema.json
+└── README.md
+```
+
+*The structure above highlights the main application areas rather than listing every project file.*
 
 ## Getting Started
 
-### Installing the template
+### Prerequisites
 
-> **Already deployed with Vercel?** If you've already deployed using the **Sanity + Vercel Integration** or **one-click Vercel button**, please visit our [Vercel deployment instructions](vercel-installation-instructions.md) to set up your local environment and deploy Sanity Studio.
+- Node.js and npm
+- A Sanity project with access to the relevant content dataset
+- Git
 
-#### 1. Initialize template with Sanity CLI
+### 1. Clone the repository
 
-Run the command in your Terminal to initialize this template on your local computer.
-
-```shell
-npm create sanity@latest -- --template sanity-io/sanity-template-nextjs-clean
+```bash
+git clone https://github.com/Sagarbh61/the-visible-hand.git
+cd the-visible-hand
 ```
 
-See the documentation if you are [having issues with the CLI](https://www.sanity.io/help/cli-errors).
+### 2. Install dependencies
 
-#### 2. Run Studio and Next.js app locally
+```bash
+cd frontend
+npm install
+```
 
-Navigate to the template directory using `cd <your app name>`, and start the development servers by running the following command
+### 3. Configure environment variables
 
-```shell
+Create a local `.env.local` file in the `frontend` directory and configure the environment variables required by the Sanity client and application.
+
+Use the variable names expected by the project's existing configuration. Set up your own Sanity project credentials and dataset details where required.
+
+For the production website URL, the application supports:
+
+```env
+NEXT_PUBLIC_SITE_URL=https://the-visible-hand.vercel.app
+```
+
+Do not commit API tokens, private credentials, or other secrets to the repository.
+
+### 4. Start the development server
+
+From the `frontend` directory, run:
+
+```bash
 npm run dev
 ```
 
-#### 3. Open the app and sign in to the Studio
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Open the Next.js app running locally in your browser on [http://localhost:3000](http://localhost:3000).
+### 5. Build for production
 
-Open the Studio running locally in your browser on [http://localhost:3333](http://localhost:3333). You should now see a screen prompting you to log in to the Studio. Use the same service (Google, GitHub, or email) that you used when you logged in to the CLI.
+To generate an optimized production build, run:
 
-### Adding content with Sanity
-
-#### 1. Publish your first document
-
-The template comes pre-defined with a schema containing `Page`, `Post`, `Person`, and `Settings` document types.
-
-From the Studio, click "+ Create" and select the `Post` document type. Go ahead and create and publish the document.
-
-Your content should now appear in your Next.js app ([http://localhost:3000](http://localhost:3000)) as well as in the Studio on the "Presentation" Tab
-
-#### 2. Import Sample Data (optional)
-
-You may want to start with some sample content and we've got you covered. Run this command from the root of your project to import the provided dataset (sample-data.tar.gz) into your Sanity project. This step is optional but can be helpful for getting started quickly.
-
-```shell
-npm run import-sample-data
+```bash
+npm run build
 ```
 
-#### 3. Extending the Sanity schema
+The production build includes Sanity type generation before the Next.js build.
 
-The schema for the `Post` document type is defined in the `studio/src/schemaTypes/post.ts` file. You can [add more document types](https://www.sanity.io/docs/studio/schema-types) to the schema to suit your needs.
+## Content Management
 
-### Deploying your application and inviting editors
+Sanity serves as the content management system for the publication. It stores editorial content and makes that content available to the Next.js application through Sanity queries.
 
-#### 1. Deploy Sanity Studio
+The frontend uses these queries to retrieve articles and category information for the homepage, article pages, category archives, search, and related-content sections.
 
-Your Next.js frontend (`/frontend`) and Sanity Studio (`/studio`) are still only running on your local computer. It's time to deploy and get it into the hands of other content editors.
+To work on the content-management side, use the Sanity project configuration and schema included in the repository. Access to the relevant Sanity project and dataset may be required.
 
-Back in your Studio directory (`/studio`), run the following command to deploy your Sanity Studio.
+## Deployment
 
-```shell
-npx sanity deploy
-```
+The website is deployed on Vercel:
 
-#### 2. Deploy Next.js app to Vercel
+**Production URL:** https://the-visible-hand.vercel.app
 
-You have the freedom to deploy your Next.js app to your hosting provider of choice. With Vercel and GitHub being a popular choice, we'll cover the basics of that approach.
+The source code is maintained on GitHub. Deployment settings, environment variables, and the connected Git repository determine how changes reach production.
 
-1. Create a GitHub repository from this project. [Learn more](https://docs.github.com/en/migrations/importing-source-code/using-the-command-line-to-import-source-code/adding-locally-hosted-code-to-github).
-2. Create a new Vercel project and connect it to your Github repository.
-3. Set the `Root Directory` to your Next.js app.
-4. Configure your Environment Variables.
+## Development Goals
 
-#### 3. Invite a collaborator
+The project brings together editorial publishing and practical web development. Its ongoing development focuses on:
 
-Now that you’ve deployed your Next.js application and Sanity Studio, you can optionally invite a collaborator to your Studio. Open up [Manage](https://www.sanity.io/manage), select your project and click "Invite project members"
+- Improving article readability and navigation.
+- Maintaining consistent layouts across pages and screen sizes.
+- Making editorial content easier to search and discover.
+- Supporting a maintainable content-management workflow.
+- Improving accessibility, metadata, and production reliability.
 
-They will be able to access the deployed Studio, where you can collaborate together on creating content.
+## Author
 
-## Resources
+**Sagar Bhattarai**
 
-- [Sanity documentation](https://www.sanity.io/docs)
-- [Next.js documentation](https://nextjs.org/docs)
-- [Join the Sanity Community](https://slack.sanity.io)
-- [Learn Sanity](https://www.sanity.io/learn)
+Creator and editor of The Visible Hand.
 
-[vercel-deploy]: https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsanity-io%2Fsanity-template-nextjs-clean&project-name=nextjs-clean-website-sanity-template&repository-name=nextjs-clean-website-sanity-template&demo-title=Clean%20Next.js%20%2B%20Sanity%20app&demo-description=A%20clean%20Next.js%20plus%20Sanity%20starter%20with%20real-time%20visual%20editing%2C%20drag-and-drop%20page%20builder%2C%20AI%20media%20support%2C%20and%20live%20content%20updates.&demo-url=https%3A%2F%2Ftemplate-nextjs-clean.sanity.build%2F&demo-image=https%3A%2F%2Fraw.githubusercontent.com%2Fsanity-io%2Fsanity-template-nextjs-clean%2Frefs%2Fheads%2Fmain%2Fsanity-next-preview.png&products=%5B%7B%22type%22%3A%22integration%22%2C%22integrationSlug%22%3A%22sanity%22%2C%22productSlug%22%3A%22project%22%2C%22protocol%22%3A%22other%22%7D%5D&root-directory=frontend
+The publication explores economics, institutions, politics, literature, and culture through essays, reviews, and creative work.
+
+---
+
+*The Visible Hand — An Editorial Journal on Culture, Policy & Ideas.*
