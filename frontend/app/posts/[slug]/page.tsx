@@ -99,7 +99,7 @@ if (!post) {
   })
 
   return (
-    <article className="min-h-screen bg-white px-3 py-8 font-sans text-gray-900 sm:px-4 sm:py-12">
+    <article className="min-h-screen bg-white px-2 py-8 font-sans text-gray-900 sm:px-4 sm:py-12">
       <div className="container mx-auto max-w-5xl">
         {/* Back Link */}
         <Link
@@ -178,7 +178,7 @@ if (!post) {
                 }
                 fill
                 priority
-                sizes="(max-width: 768px) calc(100vw - 24px), 896px"
+                sizes="(max-width: 639px) calc(100vw - 16px), (max-width: 768px) calc(100vw - 32px), 896px"
                 className="object-cover"
               />
             </div>
@@ -192,7 +192,7 @@ if (!post) {
                 <div />
               )}
 
-              <ShareLinks />
+              <ShareLinks articleUrl={`https://the-visible-hand.vercel.app/posts/${post.slug}`} />
             </div>
           </figure>
         )}

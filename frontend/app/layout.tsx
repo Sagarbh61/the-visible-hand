@@ -106,7 +106,6 @@ export default function RootLayout({
         <div className="grow">{children}</div>
 
         {/* Editorial Footer */}
-        {/* Editorial Footer */}
         <footer className="mt-16 border-t border-gray-200 bg-gray-50">
           <div className="container mx-auto max-w-6xl px-4 py-10 sm:py-12">
             <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-8 md:min-[800px]:grid-cols-3 md:min-[999px]:grid-cols-3 md:gap-12">

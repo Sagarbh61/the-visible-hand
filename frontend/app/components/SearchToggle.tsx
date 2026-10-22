@@ -136,14 +136,14 @@ export function SearchToggle() {
                 Search articles
               </p>
 
-              <button
-                type="button"
-                onClick={() => setIsOpen(false)}
-                aria-label="Close search"
-                className="p-2 text-gray-500 transition-colors hover:text-red-800"
-              >
-                {closeIcon}
-              </button>
+             <button
+  type="button"
+  onClick={() => setIsOpen(false)}
+  aria-label="Close search"
+  className="p-2 text-gray-500 transition-colors hover:text-red-800"
+>
+  {closeIcon}
+</button>
             </div>
 
             <form action="/search" method="GET" role="search">

@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import Link from 'next/link'
-
 import { sanityFetch } from '@/sanity/lib/live'
 import { morePostsQuery, allPostsQuery } from '@/sanity/lib/queries'
 import { AllPostsQueryResult } from '@/sanity.types'
@@ -110,7 +109,6 @@ export const MorePosts = async ({ skip, limit }: { skip: string; limit: number }
 
 export const AllPosts = async () => {
   const { data } = await sanityFetch({ query: allPostsQuery })
-
   if (!data || data.length === 0) {
     return <OnBoarding />
   }
