@@ -873,6 +873,59 @@ export type MorePostsQueryResult = Array<{
 }>
 
 // Source: sanity/lib/queries.ts
+// Variable: relatedPostsQuery
+// Query: *[    _type == "post" &&    slug.current != $slug &&    defined(slug.current) &&    count(      categories[        @._ref in *[          _type == "post" &&          slug.current == $slug        ][0].categories[]._ref      ]    ) > 0  ] | order(publishedAt desc, _updatedAt desc) [0...3] {      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  mainImage,  "date": coalesce(publishedAt, _updatedAt),  "author": author->{name, bio, image},  "categories": categories[]->{title, slug}  }
+export type RelatedPostsQueryResult = Array<{
+  _id: string
+  status: 'draft' | 'published'
+  title: string
+  slug: string
+  excerpt: string | null
+  mainImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+  } | null
+  date: string
+  author: {
+    name: string
+    bio: Array<{
+      children?: Array<{
+        marks?: Array<string>
+        text?: string
+        _type: 'span'
+        _key: string
+      }>
+      style?: 'normal'
+      listItem?: never
+      markDefs?: Array<{
+        href?: string
+        _type: 'link'
+        _key: string
+      }>
+      level?: number
+      _type: 'block'
+      _key: string
+    }> | null
+    image: {
+      asset?: SanityImageAssetReference
+      media?: unknown
+      hotspot?: SanityImageHotspot
+      crop?: SanityImageCrop
+      _type: 'image'
+    } | null
+  } | null
+  categories: Array<{
+    title: string
+    slug: Slug
+  }> | null
+}>
+
+// Source: sanity/lib/queries.ts
 // Variable: postQuery
 // Query: *[_type == "post" && slug.current == $slug] [0] {    body[]{      ...,      markDefs[]{        ...,          _type == "link" => {    "page": page->slug.current,    "post": post->slug.current  }      }    },      _id,  "status": select(_originalId in path("drafts.**") => "draft", "published"),  "title": coalesce(title, "Untitled"),  "slug": slug.current,  excerpt,  mainImage,  "date": coalesce(publishedAt, _updatedAt),  "author": author->{name, bio, image},  "categories": categories[]->{title, slug}  }
 export type PostQueryResult = {
@@ -972,6 +1025,30 @@ export type PagesSlugsResult = Array<{
   slug: string
 }>
 
+// Source: sanity/lib/queries.ts
+// Variable: searchPostsQuery
+// Query: *[    _type == "post" &&    defined(slug.current) &&    (      title match $searchPattern ||      excerpt match $searchPattern    )  ] | order(publishedAt desc, _updatedAt desc) [0...50] {    _id,    "title": coalesce(title, "Untitled"),    "slug": slug.current,    excerpt,    mainImage,    "date": coalesce(publishedAt, _updatedAt),    "categories": categories[]->{title, slug}  }
+export type SearchPostsQueryResult = Array<{
+  _id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  mainImage: {
+    asset?: SanityImageAssetReference
+    media?: unknown
+    hotspot?: SanityImageHotspot
+    crop?: SanityImageCrop
+    alt?: string
+    caption?: string
+    _type: 'image'
+  } | null
+  date: string
+  categories: Array<{
+    title: string
+    slug: Slug
+  }> | null
+}>
+
 // Query TypeMap
 import '@sanity/client'
 declare module '@sanity/client' {
@@ -981,8 +1058,10 @@ declare module '@sanity/client' {
     '\n  *[\n    _type in ["page", "post", "category"] &&\n    defined(slug.current) &&\n    !(_id in path("drafts.**"))\n  ] | order(_type asc) {\n    "slug": slug.current,\n    _type,\n    _updatedAt,\n  }\n': SitemapDataResult
     '\n  *[_type == "post" && defined(slug.current)] | order(publishedAt desc, _updatedAt desc) {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  mainImage,\n  "date": coalesce(publishedAt, _updatedAt),\n  "author": author->{name, bio, image},\n  "categories": categories[]->{title, slug}\n\n  }\n': AllPostsQueryResult
     '\n  *[_type == "post" && _id != $skip && defined(slug.current)] | order(publishedAt desc, _updatedAt desc) [0...$limit] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  mainImage,\n  "date": coalesce(publishedAt, _updatedAt),\n  "author": author->{name, bio, image},\n  "categories": categories[]->{title, slug}\n\n  }\n': MorePostsQueryResult
+    '\n  *[\n    _type == "post" &&\n    slug.current != $slug &&\n    defined(slug.current) &&\n    count(\n      categories[\n        @._ref in *[\n          _type == "post" &&\n          slug.current == $slug\n        ][0].categories[]._ref\n      ]\n    ) > 0\n  ] | order(publishedAt desc, _updatedAt desc) [0...3] {\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  mainImage,\n  "date": coalesce(publishedAt, _updatedAt),\n  "author": author->{name, bio, image},\n  "categories": categories[]->{title, slug}\n\n  }\n': RelatedPostsQueryResult
     '\n  *[_type == "post" && slug.current == $slug] [0] {\n    body[]{\n      ...,\n      markDefs[]{\n        ...,\n        \n  _type == "link" => {\n    "page": page->slug.current,\n    "post": post->slug.current\n  }\n\n      }\n    },\n    \n  _id,\n  "status": select(_originalId in path("drafts.**") => "draft", "published"),\n  "title": coalesce(title, "Untitled"),\n  "slug": slug.current,\n  excerpt,\n  mainImage,\n  "date": coalesce(publishedAt, _updatedAt),\n  "author": author->{name, bio, image},\n  "categories": categories[]->{title, slug}\n\n  }\n': PostQueryResult
     '\n  *[_type == "post" && defined(slug.current)]\n  {"slug": slug.current}\n': PostPagesSlugsResult
     '\n  *[_type == "page" && defined(slug.current)]\n  {"slug": slug.current}\n': PagesSlugsResult
+    '\n  *[\n    _type == "post" &&\n    defined(slug.current) &&\n    (\n      title match $searchPattern ||\n      excerpt match $searchPattern\n    )\n  ] | order(publishedAt desc, _updatedAt desc) [0...50] {\n    _id,\n    "title": coalesce(title, "Untitled"),\n    "slug": slug.current,\n    excerpt,\n    mainImage,\n    "date": coalesce(publishedAt, _updatedAt),\n    "categories": categories[]->{title, slug}\n  }\n': SearchPostsQueryResult
   }
 }

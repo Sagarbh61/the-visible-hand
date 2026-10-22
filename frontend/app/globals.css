@@ -43,3 +43,15 @@
 
   --default-transition-duration: 250ms;
 }
+/* Remove the browser's default search clear button */
+.search-input::-webkit-search-cancel-button,
+.search-input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Remove the native search field styling */
+.search-input {
+  appearance: none;
+  -webkit-appearance: none;
+}

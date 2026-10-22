@@ -2,9 +2,12 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { PortableText } from '@portabletext/react'
-import { sanityFetch } from '@/sanity/lib/live'
-import { postQuery } from '@/sanity/lib/queries'
 import type { Metadata } from 'next'
+import { sanityFetch } from '@/sanity/lib/live'
+import {
+  postQuery,
+  relatedPostsQuery,
+} from '@/sanity/lib/queries'
 import type { PostQueryResult } from '@/sanity.types'
 import { resolveOpenGraphImage, urlForImage } from '@/sanity/lib/utils'
 import ShareLinks from './ShareLinks'
@@ -15,7 +18,9 @@ interface PostPageProps {
   }>
 }
 
-async function getPost(slug: string): Promise<PostQueryResult> {
+async function getPost(
+  slug: string,
+): Promise<PostQueryResult | null> {
   const { data } = await sanityFetch({
     query: postQuery,
     params: { slug },
@@ -77,16 +82,24 @@ export async function generateMetadata({
   }
 }
 
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage({
+  params,
+}: PostPageProps) {
   const { slug } = await params
-  const post = await getPost(slug)
+ const post = await getPost(slug)
 
-  if (!post) {
-    notFound()
-  }
+if (!post) {
+  console.error('Post not found for slug:', slug)
+  notFound()
+}
+
+  const { data: relatedPosts } = await sanityFetch({
+    query: relatedPostsQuery,
+    params: { slug },
+  })
 
   return (
-    <article className="min-h-screen bg-white py-8 px-3 sm:px-4 sm:py-12 font-sans text-gray-900">
+    <article className="min-h-screen bg-white px-3 py-8 font-sans text-gray-900 sm:px-4 sm:py-12">
       <div className="container mx-auto max-w-5xl">
         {/* Back Link */}
         <Link
@@ -128,7 +141,9 @@ export default async function PostPage({ params }: PostPageProps) {
           {/* Author and Publication Date */}
           {(post.author?.name || post.date) && (
             <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-gray-500">
-              {post.author?.name && <span>By {post.author.name}</span>}
+              {post.author?.name && (
+                <span>By {post.author.name}</span>
+              )}
 
               {post.author?.name && post.date && (
                 <span aria-hidden="true">·</span>
@@ -150,13 +165,17 @@ export default async function PostPage({ params }: PostPageProps) {
         {/* Featured Image and Sharing Links */}
         {post.mainImage?.asset && (
           <figure className="mb-10">
-            <div className="relative aspect-[16/9] overflow-hidden bg-gray-100">
+            <div className="relative aspect-video overflow-hidden bg-gray-100">
               <Image
                 src={urlForImage(post.mainImage)
                   .width(1600)
                   .auto('format')
                   .url()}
-                alt={post.mainImage.alt || post.title || 'Article featured image'}
+                alt={
+                  post.mainImage.alt ||
+                  post.title ||
+                  'Article featured image'
+                }
                 fill
                 priority
                 sizes="(max-width: 768px) calc(100vw - 24px), 896px"
@@ -178,7 +197,6 @@ export default async function PostPage({ params }: PostPageProps) {
           </figure>
         )}
 
-
         {/* Article Body */}
         <main className="prose prose-lg max-w-none font-serif leading-relaxed text-gray-800 sm:prose-xl">
           {post.body ? (
@@ -189,6 +207,74 @@ export default async function PostPage({ params }: PostPageProps) {
             </p>
           )}
         </main>
+
+        {/* Related Articles */}
+        {relatedPosts && relatedPosts.length > 0 && (
+          <section className="mt-16 border-t border-gray-200 pt-10 sm:mt-20 sm:pt-12">
+            <div className="mb-8">
+              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-red-700">
+                Continue Reading
+              </p>
+
+              <h2 className="mt-2 font-serif text-2xl font-bold text-gray-900 sm:text-3xl">
+                Explore More
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {relatedPosts.map((relatedPost) => (
+                <article
+                  key={relatedPost._id}
+                  className="min-w-0"
+                >
+                  <Link
+                    href={`/posts/${relatedPost.slug}`}
+                    className="group block"
+                  >
+                    {relatedPost.mainImage?.asset && (
+                      <div className="relative mb-4 aspect-video overflow-hidden bg-gray-100">
+                        <Image
+                          src={urlForImage(relatedPost.mainImage)
+                            .width(700)
+                            .auto('format')
+                            .url()}
+                          alt={
+                            relatedPost.mainImage.alt ||
+                            relatedPost.title ||
+                            'Related article image'
+                          }
+                          fill
+                          sizes="(max-width: 640px) calc(100vw - 32px), (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover transition-opacity duration-300 group-hover:opacity-80"
+                        />
+                      </div>
+                    )}
+
+                    {relatedPost.categories &&
+                      relatedPost.categories.length > 0 && (
+                        <p className="mb-2 font-mono text-[10px] font-semibold uppercase tracking-widest text-red-700">
+                          {relatedPost.categories
+                            .map((category) => category.title)
+                            .filter(Boolean)
+                            .join(' / ')}
+                        </p>
+                      )}
+
+                    <h3 className="font-serif text-xl font-bold leading-snug text-gray-900 underline decoration-transparent underline-offset-4 transition-colors duration-200 group-hover:text-red-800 group-hover:decoration-red-800">
+                      {relatedPost.title}
+                    </h3>
+
+                    {relatedPost.excerpt && (
+                      <p className="mt-2 line-clamp-3 font-serif text-sm leading-relaxed text-gray-600">
+                        {relatedPost.excerpt}
+                      </p>
+                    )}
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </article>
   )

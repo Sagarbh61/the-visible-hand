@@ -82,6 +82,26 @@ export const morePostsQuery = defineQuery(`
   }
 `)
 
+
+export const relatedPostsQuery = defineQuery(`
+  *[
+    _type == "post" &&
+    slug.current != $slug &&
+    defined(slug.current) &&
+    count(
+      categories[
+        @._ref in *[
+          _type == "post" &&
+          slug.current == $slug
+        ][0].categories[]._ref
+      ]
+    ) > 0
+  ] | order(publishedAt desc, _updatedAt desc) [0...3] {
+    ${postFields}
+  }
+`)
+
+
 export const postQuery = defineQuery(`
   *[_type == "post" && slug.current == $slug] [0] {
     body[]{
@@ -103,4 +123,24 @@ export const postPagesSlugs = defineQuery(`
 export const pagesSlugs = defineQuery(`
   *[_type == "page" && defined(slug.current)]
   {"slug": slug.current}
+`)
+
+
+export const searchPostsQuery = defineQuery(`
+  *[
+    _type == "post" &&
+    defined(slug.current) &&
+    (
+      title match $searchPattern ||
+      excerpt match $searchPattern
+    )
+  ] | order(publishedAt desc, _updatedAt desc) [0...50] {
+    _id,
+    "title": coalesce(title, "Untitled"),
+    "slug": slug.current,
+    excerpt,
+    mainImage,
+    "date": coalesce(publishedAt, _updatedAt),
+    "categories": categories[]->{title, slug}
+  }
 `)
