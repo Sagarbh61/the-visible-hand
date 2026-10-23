@@ -59,23 +59,23 @@ export default function RootLayout({
         {/* Header Navigation */}
         <header className="border-b border-gray-200">
 
-<div className="container mx-auto max-w-5xl px-4 py-6 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3 sm:py-8">
-  <div className="relative text-center sm:col-start-2 sm:row-start-1">
-    <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-5xl">
-      <Link href="/" className="transition-colors hover:text-red-800">
-        The Visible Hand
-      </Link>
-    </h1>
+          <div className="container mx-auto max-w-5xl px-4 py-6 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3 sm:py-8">
+            <div className="relative text-center sm:col-start-2 sm:row-start-1">
+              <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-5xl">
+                <Link href="/" className="transition-colors hover:text-red-800">
+                  The Visible Hand
+                </Link>
+              </h1>
 
-    <p className="mt-2 font-mono text-[9px] uppercase tracking-wider text-gray-500 sm:text-xs sm:tracking-widest">
-      An Editorial Journal on Culture, Policy &amp; Ideas
-    </p>
-  </div>
+              <p className="mt-2 font-mono text-[9px] uppercase tracking-wider text-gray-500 sm:text-xs sm:tracking-widest">
+                An Editorial Journal on Culture, Policy &amp; Ideas
+              </p>
+            </div>
 
-  <div className="absolute right-4 top-10 flex justify-end sm:relative sm:right-auto sm:top-auto sm:col-start-3 sm:row-start-1">
-    <SearchToggle />
-  </div>
-</div>
+            <div className="absolute right-4 top-10 flex justify-end sm:relative sm:right-auto sm:top-auto sm:col-start-3 sm:row-start-1">
+              <SearchToggle />
+            </div>
+          </div>
 
 
 
@@ -232,7 +232,10 @@ export default function RootLayout({
             <div className="mt-8 flex flex-col gap-3 border-t border-gray-200 pt-5 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
               <p>© {new Date().getFullYear()} The Visible Hand</p>
 
-              <nav aria-label="Legal links" className="flex flex-wrap gap-x-5 gap-y-2">
+              <nav aria-label="Footer links" className="flex flex-wrap gap-x-5 gap-y-2">
+                <Link href="/about" className="transition-colors hover:text-red-800">
+                  About
+                </Link>
                 <Link href="/privacy" className="transition-colors hover:text-red-800">
                   Privacy Policy
                 </Link>
