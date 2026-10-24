@@ -22,28 +22,18 @@ async function getPost(
   slug: string,
 ): Promise<PostQueryResult | null> {
 const { data } = await sanityFetch({
-  query: `*[_type == "post" && slug.current == $slug][0]{
-    _id,
-    title,
-    "slug": slug.current
-  }`,
+  query: postQuery,
   params: { slug },
 })
 
-const diagnosticData = data as {
-  _id?: string
-  title?: string
-  slug?: string
-} | null
-
 console.log('[getPost diagnostic]', {
   slug,
-  found: Boolean(diagnosticData),
-  title: diagnosticData?.title,
-  id: diagnosticData?._id,
+  found: Boolean(data),
+  title: data?.title,
+  id: data?._id,
 })
 
-return diagnosticData as PostQueryResult | null
+return data
 
 }
 
