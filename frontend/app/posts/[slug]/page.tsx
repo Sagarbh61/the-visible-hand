@@ -26,7 +26,14 @@ async function getPost(
     params: { slug },
   })
 
+  console.log('[getPost]', {
+    slug,
+    found: Boolean(data),
+    title: data?.title,
+  })
+
   return data
+
 }
 
 export async function generateMetadata({
