@@ -21,18 +21,29 @@ interface PostPageProps {
 async function getPost(
   slug: string,
 ): Promise<PostQueryResult | null> {
-  const { data } = await sanityFetch({
-    query: postQuery,
-    params: { slug },
-  })
+const { data } = await sanityFetch({
+  query: `*[_type == "post" && slug.current == $slug][0]{
+    _id,
+    title,
+    "slug": slug.current
+  }`,
+  params: { slug },
+})
 
-  console.log('[getPost]', {
-    slug,
-    found: Boolean(data),
-    title: data?.title,
-  })
+const diagnosticData = data as {
+  _id?: string
+  title?: string
+  slug?: string
+} | null
 
-  return data
+console.log('[getPost diagnostic]', {
+  slug,
+  found: Boolean(diagnosticData),
+  title: diagnosticData?.title,
+  id: diagnosticData?._id,
+})
+
+return diagnosticData as PostQueryResult | null
 
 }
 
