@@ -4,6 +4,7 @@ import { NewsletterForm } from '@/app/components/NewsletterForm'
 import { AnalyticsConsent } from '@/app/components/AnalyticsConsent'
 import '@/app/globals.css'
 import { SearchToggle } from '@/app/components/SearchToggle'
+import { SanityLive } from '@/sanity/lib/live'
 
 
 const siteUrl = (
@@ -246,6 +247,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <SanityLive />
         <AnalyticsConsent />
       </body>
     </html>
