@@ -11,6 +11,7 @@ import {
 import type { PostQueryResult } from '@/sanity.types'
 import { resolveOpenGraphImage, urlForImage } from '@/sanity/lib/utils'
 import ShareLinks from './ShareLinks'
+import { client } from '@/sanity/lib/client'
 
 interface PostPageProps {
   params: Promise<{
@@ -21,19 +22,19 @@ interface PostPageProps {
 async function getPost(
   slug: string,
 ): Promise<PostQueryResult | null> {
-const { data } = await sanityFetch({
-  query: postQuery,
-  params: { slug },
-})
+const diagnosticData = await client.fetch(
+  postQuery,
+  { slug }
+)
 
-console.log('[getPost diagnostic]', {
+console.log('[getPost direct client diagnostic]', {
   slug,
-  found: Boolean(data),
-  title: data?.title,
-  id: data?._id,
+  found: Boolean(diagnosticData),
+  title: diagnosticData?.title,
+  id: diagnosticData?._id,
 })
 
-return data
+return diagnosticData
 
 }
 
