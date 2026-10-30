@@ -9,7 +9,7 @@ import { SanityLive } from '@/sanity/lib/live'
 
 const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ||
-  'https://the-visible-hand.vercel.app'
+  'https://sagarbhattarai.name.np'
 ).replace(/\/+$/, '')
 
 export const metadata: Metadata = {
