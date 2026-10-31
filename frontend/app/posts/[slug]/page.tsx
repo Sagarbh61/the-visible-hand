@@ -22,20 +22,12 @@ interface PostPageProps {
 async function getPost(
   slug: string,
 ): Promise<PostQueryResult | null> {
-const diagnosticData = await client.fetch(
-  postQuery,
-  { slug }
-)
+  const post = await client.fetch(
+    postQuery,
+    { slug },
+  )
 
-console.log('[getPost direct client diagnostic]', {
-  slug,
-  found: Boolean(diagnosticData),
-  title: diagnosticData?.title,
-  id: diagnosticData?._id,
-})
-
-return diagnosticData
-
+  return post
 }
 
 export async function generateMetadata({
@@ -95,12 +87,11 @@ export default async function PostPage({
   params,
 }: PostPageProps) {
   const { slug } = await params
- const post = await getPost(slug)
+  const post = await getPost(slug)
 
-if (!post) {
-  console.error('Post not found for slug:', slug)
-  notFound()
-}
+  if (!post) {
+    notFound()
+  }
 
   const { data: relatedPosts } = await sanityFetch({
     query: relatedPostsQuery,
@@ -108,7 +99,7 @@ if (!post) {
   })
 
   return (
-    <article className="min-h-screen bg-white px-2 py-8 font-sans text-gray-900 sm:px-4 sm:py-12">
+    <article className="min-h-screen bg-white py-8 font-sans text-gray-900 sm:px-4 sm:py-12">
       <div className="container mx-auto max-w-5xl">
         {/* Back Link */}
         <Link
@@ -142,14 +133,14 @@ if (!post) {
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="mt-5 font-serif text-lg italic leading-relaxed text-gray-600 sm:text-xl">
+            <p className="mt-4 font-serif text-base italic leading-relaxed text-gray-600 sm:mt-5 sm:text-lg">
               {post.excerpt}
             </p>
           )}
 
           {/* Author and Publication Date */}
           {(post.author?.name || post.date) && (
-            <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-gray-500">
+            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-gray-500 sm:mt-6">
               {post.author?.name && (
                 <span>By {post.author.name}</span>
               )}
@@ -173,7 +164,7 @@ if (!post) {
 
         {/* Featured Image and Sharing Links */}
         {post.mainImage?.asset && (
-          <figure className="mb-10">
+          <figure className="mb-8 sm:mb-10">
             <div className="relative aspect-video overflow-hidden bg-gray-100">
               <Image
                 src={urlForImage(post.mainImage)
@@ -201,13 +192,15 @@ if (!post) {
                 <div />
               )}
 
-              <ShareLinks articleUrl={`https://the-visible-hand.vercel.app/posts/${post.slug}`} />
+              <ShareLinks
+                articleUrl={`https://sagarbhattarai.name.np/posts/${post.slug}`}
+              />
             </div>
           </figure>
         )}
 
         {/* Article Body */}
-        <main className="prose prose-lg max-w-none font-serif leading-relaxed text-gray-800 sm:prose-xl">
+        <main className="prose prose-base max-w-none font-serif leading-[1.75] text-gray-800 sm:prose-xl sm:leading-relaxed">
           {post.body ? (
             <PortableText value={post.body} />
           ) : (
@@ -219,8 +212,8 @@ if (!post) {
 
         {/* Related Articles */}
         {relatedPosts && relatedPosts.length > 0 && (
-          <section className="mt-16 border-t border-gray-200 pt-10 sm:mt-20 sm:pt-12">
-            <div className="mb-8">
+          <section className="mt-14 border-t border-gray-200 pt-8 sm:mt-20 sm:pt-12">
+            <div className="mb-6 sm:mb-8">
               <p className="font-mono text-xs font-semibold uppercase tracking-widest text-red-700">
                 Continue Reading
               </p>

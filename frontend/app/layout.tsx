@@ -6,7 +6,6 @@ import '@/app/globals.css'
 import { SearchToggle } from '@/app/components/SearchToggle'
 import { SanityLive } from '@/sanity/lib/live'
 
-
 const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ||
   'https://sagarbhattarai.name.np'
@@ -40,7 +39,6 @@ export const metadata: Metadata = {
   },
 }
 
-
 const CATEGORIES = [
   { name: 'Economy', slug: 'economy' },
   { name: 'Politics', slug: 'politics' },
@@ -59,31 +57,28 @@ export default function RootLayout({
       <body className="min-h-screen bg-white text-gray-900 font-sans flex flex-col justify-between antialiased">
         {/* Header Navigation */}
         <header className="border-b border-gray-200">
+          <div className="container mx-auto max-w-5xl px-2 py-2 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3 sm:py-8">
 
-          <div className="container mx-auto max-w-5xl px-4 py-6 sm:grid sm:grid-cols-[1fr_auto_1fr] sm:items-center sm:gap-3 sm:py-8">
-            <div className="relative text-center sm:col-start-2 sm:row-start-1">
-              <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-5xl">
+            {/* Search */}
+            <div className="order-1 mb-3 sm:mb-none flex justify-start sm:order-none sm:relative sm:col-start-3 sm:row-start-1 sm:justify-end sm:translate-x-12">
+              <SearchToggle />
+            </div>
+
+            {/* Publication identity */}
+            <div className="order-2 relative text-center sm:col-start-2 sm:row-start-1">
+              <h1 className="font-serif text-5xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
                 <Link href="/" className="transition-colors hover:text-red-800">
                   The Visible Hand
                 </Link>
               </h1>
 
-              <p className="mt-2 font-mono text-[9px] uppercase tracking-wider text-gray-500 sm:text-xs sm:tracking-widest">
+              <p className="mt-2 mb-1 font-mono text-[9px] uppercase tracking-wider text-gray-500 sm:text-xs sm:tracking-widest">
                 An Editorial Journal on Culture, Policy &amp; Ideas
               </p>
             </div>
-
-            <div className="absolute right-4 top-10 flex justify-end sm:relative sm:right-auto sm:top-auto sm:col-start-3 sm:row-start-1">
-              <SearchToggle />
-            </div>
           </div>
 
-
-
-
-
-
-          <nav className="border-t border-gray-100 bg-gray-50/80">
+          <nav className="border-t border-gray-100 bg-gray-50/200">
             <div className="container mx-auto max-w-5xl px-3 sm:px-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-8 py-3 text-[10px] sm:text-sm font-medium tracking-wide uppercase font-mono text-gray-700">
               {CATEGORIES.map((cat: { name: string; slug: string }) => (
                 <Link
@@ -94,12 +89,7 @@ export default function RootLayout({
                   {cat.name}
                 </Link>
               ))}
-
-
             </div>
-
-
-
           </nav>
         </header>
 
@@ -107,19 +97,19 @@ export default function RootLayout({
         <div className="grow">{children}</div>
 
         {/* Editorial Footer */}
-        <footer className="mt-16 border-t border-gray-200 bg-gray-50">
-          <div className="container mx-auto max-w-6xl px-4 py-10 sm:py-12">
+        <footer className="mt-16 border-t border-gray-200 bg-gray-50/150">
+          <div className="container mx-auto max-w-6xl px-5 py-10 sm:py-12">
             <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-8 md:min-[800px]:grid-cols-3 md:min-[999px]:grid-cols-3 md:gap-12">
+
               {/* Publication identity */}
               <div className="flex flex-col">
-
-
                 <Link
                   href="/"
                   className="font-serif text-4xl whitespace-nowrap font-bold tracking-tight text-gray-900 transition-colors hover:text-red-800"
                 >
                   The Visible Hand
                 </Link>
+
                 <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-gray-500">
                   An Editorial Journal on Culture, Policy &amp; Ideas
                 </p>
@@ -194,11 +184,7 @@ export default function RootLayout({
                     </svg>
                   </a>
                 </div>
-
-
               </div>
-
-
 
               {/* Category navigation */}
               <nav
@@ -212,9 +198,11 @@ export default function RootLayout({
                         href={`/category/${cat.slug}`}
                         className="group flex w-full text-left items-center gap-4 text-sm uppercase text-gray-700 transition-colors hover:text-red-800"
                       >
-
                         <span>{cat.name}</span>
-                        <span aria-hidden="true" className="text-xl text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-red-800">
+                        <span
+                          aria-hidden="true"
+                          className="text-xl text-gray-400 transition-transform group-hover:translate-x-1 group-hover:text-red-800"
+                        >
                           ›
                         </span>
                       </Link>
@@ -247,6 +235,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+
         <SanityLive />
         <AnalyticsConsent />
       </body>

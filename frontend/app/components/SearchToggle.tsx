@@ -68,42 +68,41 @@ export function SearchToggle() {
           onClick={() => setIsOpen((open) => !open)}
           aria-label={isOpen ? 'Close search' : 'Open search'}
           aria-expanded={isOpen}
-          className={`relative z-10 p-2 transition-colors hover:text-red-800 ${
-            isOpen ? 'text-gray-500' : 'text-gray-600'
-          }`}
+          className={`relative z-10 p-2 transition-colors hover:text-red-800 ${isOpen ? 'text-gray-500' : 'text-gray-600'
+            }`}
         >
           {isOpen ? closeIcon : searchIcon}
         </button>
 
-        <form
-          action="/search"
-          method="GET"
-          role="search"
-          aria-hidden={!isOpen}
-          className={`absolute right-0 top-1/2 flex -translate-y-1/2 items-center overflow-hidden transition-[width] duration-300 ease-out ${
-  isOpen
-    ? 'w-60 max-[950px]:w-52 max-[950px]:right-0 pr-10'
-    : 'pointer-events-none w-0'
-}`}
-        >
-          <div
-            className={`flex min-w-0 flex-1 items-center border-b transition-colors duration-300 ${
-              isOpen
-                ? 'border-gray-400 focus-within:border-red-800'
-                : 'border-transparent'
-            }`}
-          >
-            <input
-              ref={inputRef}
-              type="search"
-              name="q"
-              placeholder="Search articles"
-              aria-label="Search articles"
-              tabIndex={isOpen ? 0 : -1}
-              className="search-input min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-gray-400"
-            />
-          </div>
-        </form>
+<form
+  action="/search"
+  method="GET"
+  role="search"
+  aria-hidden={!isOpen}
+  className={`absolute right-0 top-1/2 flex -translate-y-1/2 items-center overflow-hidden transition-[width] duration-300 ease-out ${
+    isOpen
+      ? 'w-60 max-[950px]:w-52 pr-10'
+      : 'pointer-events-none w-0'
+  }`}
+>
+  <div
+    className={`flex min-w-0 flex-1 items-center border-b transition-[opacity,border-color] duration-150 ${
+      isOpen
+        ? 'border-gray-400 opacity-100 focus-within:border-red-800'
+        : 'border-transparent opacity-0'
+    }`}
+  >
+    <input
+      ref={inputRef}
+      type="search"
+      name="q"
+      placeholder="Search articles"
+      aria-label="Search articles"
+      tabIndex={isOpen ? 0 : -1}
+      className="search-input min-w-0 flex-1 bg-transparent py-2 text-sm outline-none placeholder:text-gray-400"
+    />
+  </div>
+</form>
       </div>
 
       {/* Mobile search trigger */}
@@ -112,7 +111,7 @@ export function SearchToggle() {
         onClick={() => setIsOpen(true)}
         aria-label="Open search"
         aria-expanded={isOpen}
-        className="p-2 text-gray-600 transition-colors hover:text-red-800 min-[901px]:hidden"
+        className=" text-gray-600 transition-colors hover:text-red-800 min-[901px]:hidden"
       >
         {searchIcon}
       </button>
@@ -120,7 +119,7 @@ export function SearchToggle() {
       {/* Mobile popup */}
       {isOpen && (
         <div
-         className="fixed inset-0 z-100 flex items-start justify-center bg-black/40 px-4 pt-[18vh] backdrop-blur-[2px] min-[901px]:hidden"
+          className="fixed inset-0 z-100 flex items-start justify-center bg-black/40 px-4 pt-[18vh] backdrop-blur-[2px] min-[901px]:hidden"
           onClick={(event) => {
             if (event.target === event.currentTarget) setIsOpen(false)
           }}
@@ -136,14 +135,14 @@ export function SearchToggle() {
                 Search articles
               </p>
 
-             <button
-  type="button"
-  onClick={() => setIsOpen(false)}
-  aria-label="Close search"
-  className="p-2 text-gray-500 transition-colors hover:text-red-800"
->
-  {closeIcon}
-</button>
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close search"
+                className="p-2 text-gray-500 transition-colors hover:text-red-800"
+              >
+                {closeIcon}
+              </button>
             </div>
 
             <form action="/search" method="GET" role="search">

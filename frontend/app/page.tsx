@@ -12,12 +12,12 @@ const CATEGORIES = [
 
 export default async function Page() {
   return (
-    <main className="container mx-auto max-w-5xl px-4 py-12 sm:py-16">
+    <main className="container mx-auto max-w-6xl px-6 py-12 sm:py-16">
       <section aria-labelledby="latest-heading">
-        <div className="mb-8">
+        <div className="mb-4">
           <h1
             id="latest-heading"
-            className="border-b border-gray-900 pb-3 font-serif text-3xl font-bold text-gray-900 sm:text-4xl"
+            className="border-gray-900 font-serif text-3xl font-bold text-gray-900 sm:text-4xl"
           >
             Latest essays
           </h1>
@@ -47,12 +47,12 @@ export default async function Page() {
             <Link
               key={category.slug}
               href={`/category/${category.slug}`}
-              className="group border border-gray-200 p-5 transition-colors hover:border-gray-500 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
+              className="group border border-gray-200 p-5 transition-colors hover:border-red-800 hover:bg-gray-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900"
             >
-              <h3 className="font-serif text-xl font-bold text-gray-900 group-hover:text-gray-600">
+              <h3 className="font-serif text-xl font-bold text-gray-900 ">
                 {category.name}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-gray-600">
+              <p className="mt-2 text-sm leading-6 text-gray-600 ">
                 {category.description}
               </p>
             </Link>

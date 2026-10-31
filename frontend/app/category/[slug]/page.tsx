@@ -118,10 +118,10 @@ const posts: CategoryPost[] = await client.fetch(postsByCategoryQuery, {
 })
 
   return (
-    <div className="container mx-auto max-w-5xl px-4 py-12">
-      <div className="mb-10 border-b border-gray-200 pb-6 text-center">
+    <div className="container mx-auto max-w-6xl px-4 py-12">
+      <div className="mb-10  border-gray-200 pb-6 text-center">
         <p className="mb-2 font-mono text-xs uppercase tracking-widest text-gray-500">
-          Category Archive
+          Archive /
         </p>
 
         <h1 className="font-serif text-4xl font-bold text-gray-900 sm:text-5xl">

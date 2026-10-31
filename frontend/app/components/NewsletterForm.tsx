@@ -73,15 +73,14 @@ export function NewsletterForm() {
               type="email"
               name="email"
               required
-              placeholder="Your email address..."
-              className="box-border w-full min-w-0 border border-gray-300 bg-white px-3 py-2.5 font-mono text-xs text-gray-900 transition-colors focus:border-red-800 focus:outline-none"
+              placeholder="yourname@email.com"
+              className="box-border rounded-sm w-ful h-15 min-w-0 border border-gray-300 bg-white px-3 py-2.5 font-sans text-[14px] text-gray-900 transition-colors focus:border-red-800 focus:outline-none"
             />
 
             <button
               type="submit"
               disabled={loading}
-              style={{ backgroundColor: '#ef4444' }}
-              className="w-full cursor-pointer px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors disabled:opacity-50"
+              className="w-40 sm:w-full cursor-pointer` bg-red-700 px-4 py-2.5 font-mono text-xs font-bold uppercase tracking-wider text-white transition-colors disabled:opacity-50"
             >
               {loading ? 'Joining...' : 'Subscribe'}
             </button>
